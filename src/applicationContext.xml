@@ -16,7 +16,7 @@
 	<context:annotation-config />
 
 	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
-	<context:component-scan base-package="test.Entity" />
+	<context:component-scan base-package="test" />
 
 	<!-- 数据库配置文件 -->
 	<bean class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
@@ -38,7 +38,7 @@
 	</bean>
 
 	<!-- hibernate sessionFactory -->
-	<bean id="mySessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+	<bean id="mySessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="myDataSource"></property>
 		<property name="hibernateProperties">
 			<props>
@@ -48,24 +48,24 @@
 		</property>
 		<property name="packagesToScan">
 			<list>
-				<value>com.spring.entity</value>
+				<value>test.Entity</value>
 			</list>
 		</property>
 	</bean>
 
 	<!-- 配置事务管理类 -->
-	<bean id="myTran" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+	<bean id="myTran" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="mySessionFactory"></property>
 	</bean>
 	<!-- 通过注解方式配置事务 -->
 	<tx:annotation-driven transaction-manager="myTran"/>
 
 	<!-- Service层注入  注入userservice  -->
-	<bean id="userservice" class="com.spring.service.UserServiceImpl">
-		<property name="userdao" ref="userdao"></property>
+	<bean id="userservice" class="test.Service.ServiceImpl.UserServiceImpl">
+		<property name="personDao" ref="persondao"></property>
 	</bean>
 	<!-- Dao层注入 -->
-	<bean id="userdao" class="com.spring.dao.UserDaoImpl">
+	<bean id="persondao" class="test.Dao.DaoImpl.PersonDaoImpl">
 		<property name="sessionFactory" ref="mySessionFactory"></property>
 	</bean>
 </beans>
